@@ -14,16 +14,177 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      package_status_history: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          notes: string | null
+          package_id: string
+          status: Database["public"]["Enums"]["package_status"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_id: string
+          status: Database["public"]["Enums"]["package_status"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_id?: string
+          status?: Database["public"]["Enums"]["package_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_status_history_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      packages: {
+        Row: {
+          created_at: string
+          current_status: Database["public"]["Enums"]["package_status"]
+          dimensions: string | null
+          id: string
+          recipient_address: string
+          recipient_name: string
+          recipient_phone: string | null
+          sender_address: string | null
+          sender_name: string | null
+          sender_phone: string | null
+          service_type: string | null
+          tracking_number: string
+          updated_at: string
+          weight: number | null
+          woocommerce_order_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_status?: Database["public"]["Enums"]["package_status"]
+          dimensions?: string | null
+          id?: string
+          recipient_address: string
+          recipient_name: string
+          recipient_phone?: string | null
+          sender_address?: string | null
+          sender_name?: string | null
+          sender_phone?: string | null
+          service_type?: string | null
+          tracking_number: string
+          updated_at?: string
+          weight?: number | null
+          woocommerce_order_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_status?: Database["public"]["Enums"]["package_status"]
+          dimensions?: string | null
+          id?: string
+          recipient_address?: string
+          recipient_name?: string
+          recipient_phone?: string | null
+          sender_address?: string | null
+          sender_name?: string | null
+          sender_phone?: string | null
+          service_type?: string | null
+          tracking_number?: string
+          updated_at?: string
+          weight?: number | null
+          woocommerce_order_id?: string | null
+        }
+        Relationships: []
+      }
+      status_configs: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_name: string
+          hours_after_previous: number
+          id: string
+          is_active: boolean
+          status: Database["public"]["Enums"]["package_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_name: string
+          hours_after_previous?: number
+          id?: string
+          is_active?: boolean
+          status: Database["public"]["Enums"]["package_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          hours_after_previous?: number
+          id?: string
+          is_active?: boolean
+          status?: Database["public"]["Enums"]["package_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      auto_update_package_status: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      package_status:
+        | "registered"
+        | "ready_for_pickup"
+        | "in_transit"
+        | "out_for_delivery"
+        | "delivered"
+        | "failed_delivery"
+        | "returned"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +311,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      package_status: [
+        "registered",
+        "ready_for_pickup",
+        "in_transit",
+        "out_for_delivery",
+        "delivered",
+        "failed_delivery",
+        "returned",
+      ],
+    },
   },
 } as const
