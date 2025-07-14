@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/AuthProvider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,12 +18,21 @@ import { Plus, Edit, Settings, Package, Clock } from "lucide-react";
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading: authLoading, signOut } = useAuth();
   const [packages, setPackages] = useState<any[]>([]);
   const [statusConfigs, setStatusConfigs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [selectedConfig, setSelectedConfig] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
+  const [profileForm, setProfileForm] = useState({
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
 
   const [newPackage, setNewPackage] = useState({
     tracking_number: "",
@@ -37,8 +47,16 @@ const AdminPanel = () => {
   });
 
   useEffect(() => {
+    if (authLoading) return;
+    
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    
     loadData();
-  }, []);
+    loadProfile();
+  }, [user, authLoading, navigate]);
 
   const loadData = async () => {
     setLoading(true);
@@ -65,6 +83,26 @@ const AdminPanel = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadProfile = async () => {
+    if (!user) return;
+    
+    try {
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      
+      setProfile(data);
+      setProfileForm({
+        ...profileForm,
+        email: data?.email || user.email || ""
+      });
+    } catch (error) {
+      console.error("Error loading profile:", error);
     }
   };
 
@@ -139,25 +177,76 @@ const AdminPanel = () => {
     }
   };
 
+  const updateProfile = async () => {
+    if (!user) return;
+
+    try {
+      // Update email in profiles table
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ email: profileForm.email })
+        .eq("id", user.id);
+
+      if (profileError) throw profileError;
+
+      // Update password if provided
+      if (profileForm.newPassword && profileForm.newPassword === profileForm.confirmPassword) {
+        const { error: passwordError } = await supabase.auth.updateUser({
+          password: profileForm.newPassword
+        });
+
+        if (passwordError) throw passwordError;
+      }
+
+      toast({
+        title: "Success",
+        description: "Profile updated successfully"
+      });
+
+      setProfileDialogOpen(false);
+      setProfileForm({
+        email: profileForm.email,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+      loadProfile();
+    } catch (error: any) {
+      toast({
+        title: "Error", 
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary">DPD Admin Panel</h1>
-          <nav className="flex gap-6">
+          <nav className="flex gap-6 items-center">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
+            <Button variant="ghost" onClick={() => setProfileDialogOpen(true)}>Profile</Button>
+            <Button variant="outline" onClick={handleSignOut}>Sign Out</Button>
           </nav>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="packages" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="packages">Package Management</TabsTrigger>
             <TabsTrigger value="settings">Status Settings</TabsTrigger>
+            <TabsTrigger value="profile">Profile Settings</TabsTrigger>
           </TabsList>
 
           {/* Package Management */}
@@ -398,7 +487,88 @@ const AdminPanel = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Profile Settings */}
+          <TabsContent value="profile">
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Settings</CardTitle>
+                <CardDescription>
+                  Update your account information and change password
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label>Current Email</Label>
+                  <Input value={profile?.email || user?.email || ""} disabled />
+                </div>
+                
+                <div>
+                  <Label>Role</Label>
+                  <Input value={profile?.role || "admin"} disabled />
+                </div>
+
+                <div>
+                  <Label>Account Created</Label>
+                  <Input 
+                    value={profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : ""} 
+                    disabled 
+                  />
+                </div>
+
+                <Button onClick={() => setProfileDialogOpen(true)}>
+                  Update Profile
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
+
+        {/* Profile Update Dialog */}
+        <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Update Profile</DialogTitle>
+              <DialogDescription>Change your email and password</DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4">
+              <div>
+                <Label>Email</Label>
+                <Input
+                  type="email"
+                  value={profileForm.email}
+                  onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
+                />
+              </div>
+              
+              <div>
+                <Label>New Password (optional)</Label>
+                <Input
+                  type="password"
+                  value={profileForm.newPassword}
+                  onChange={(e) => setProfileForm({...profileForm, newPassword: e.target.value})}
+                  placeholder="Leave blank to keep current password"
+                />
+              </div>
+              
+              <div>
+                <Label>Confirm New Password</Label>
+                <Input
+                  type="password"
+                  value={profileForm.confirmPassword}
+                  onChange={(e) => setProfileForm({...profileForm, confirmPassword: e.target.value})}
+                  placeholder="Confirm new password"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2 mt-4">
+              <Button variant="outline" onClick={() => setProfileDialogOpen(false)}>Cancel</Button>
+              <Button onClick={updateProfile}>Save Changes</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
