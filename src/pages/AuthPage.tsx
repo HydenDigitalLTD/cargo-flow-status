@@ -12,12 +12,11 @@ import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 const AuthPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "admin@admin.com",
-    password: "admin"
+    email: "",
+    password: ""
   });
   const [error, setError] = useState("");
 
@@ -38,35 +37,44 @@ const AuthPage = () => {
     setError("");
 
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password
-        });
+      // Try to sign in first
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
+      });
 
-        if (error) throw error;
+      if (signInError) {
+        // If user doesn't exist and it's the default admin credentials, create the user
+        if (formData.email === "admin@admin.com" && formData.password === "admin" && 
+            signInError.message.includes("Invalid login credentials")) {
+          
+          const { error: signUpError } = await supabase.auth.signUp({
+            email: formData.email,
+            password: formData.password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/admin`
+            }
+          });
 
-        toast({
-          title: "Success",
-          description: "Logged in successfully"
-        });
-        navigate("/admin");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/admin`
-          }
-        });
+          if (signUpError) throw signUpError;
 
-        if (error) throw error;
+          // Try to sign in again after creating the user
+          const { error: retrySignInError } = await supabase.auth.signInWithPassword({
+            email: formData.email,
+            password: formData.password
+          });
 
-        toast({
-          title: "Success", 
-          description: "Account created successfully. Please check your email to confirm."
-        });
+          if (retrySignInError) throw retrySignInError;
+        } else {
+          throw signInError;
+        }
       }
+
+      toast({
+        title: "Success",
+        description: "Logged in successfully"
+      });
+      navigate("/admin");
     } catch (error: any) {
       setError(error.message);
       toast({
@@ -84,12 +92,8 @@ const AuthPage = () => {
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">
-              {isLogin ? "Sign In" : "Create Account"}
-            </CardTitle>
-            <CardDescription>
-              {isLogin ? "Access the DPD Admin Panel" : "Create a new admin account"}
-            </CardDescription>
+            <CardTitle className="text-2xl font-bold">Admin Sign In</CardTitle>
+            <CardDescription>Access the DPD Admin Panel</CardDescription>
           </CardHeader>
           <CardContent>
             {error && (
@@ -143,35 +147,12 @@ const AuthPage = () => {
                   "Loading..."
                 ) : (
                   <>
-                    {isLogin ? <LogIn className="w-4 h-4 mr-2" /> : <UserPlus className="w-4 h-4 mr-2" />}
-                    {isLogin ? "Sign In" : "Create Account"}
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
                   </>
                 )}
               </Button>
             </form>
-
-            <div className="mt-4 text-center">
-              <Button
-                variant="link"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm"
-              >
-                {isLogin 
-                  ? "Need an account? Sign up" 
-                  : "Already have an account? Sign in"
-                }
-              </Button>
-            </div>
-
-            {isLogin && (
-              <div className="mt-4 p-3 bg-muted rounded-lg">
-                <p className="text-sm text-muted-foreground text-center">
-                  Default credentials:<br />
-                  Email: admin@admin.com<br />
-                  Password: admin
-                </p>
-              </div>
-            )}
 
             <div className="mt-4 text-center">
               <Button
