@@ -36,76 +36,84 @@ const ContactPage = () => {
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">DPD Tracking</h1>
-          <nav className="flex gap-6">
+          <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
+          <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
             <Button variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
           </nav>
+          <nav className="md:hidden flex gap-2">
+            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
+          </nav>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Contact Us</h2>
-            <p className="text-xl text-muted-foreground">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Contact Us</h2>
+            <p className="text-base md:text-xl text-muted-foreground px-4">
               Get in touch with our support team for any questions or assistance
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
             {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle>Send us a Message</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg md:text-xl">Send us a Message</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Fill out the form below and we'll get back to you as soon as possible
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                     <div>
-                      <label className="text-sm font-medium">Name</label>
+                      <label className="text-xs md:text-sm font-medium">Name</label>
                       <Input
                         value={formData.name}
                         onChange={(e) => handleInputChange("name", e.target.value)}
                         placeholder="Your name"
                         required
+                        className="mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Email</label>
+                      <label className="text-xs md:text-sm font-medium">Email</label>
                       <Input
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         placeholder="your@email.com"
                         required
+                        className="mt-1"
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <label className="text-sm font-medium">Subject</label>
+                    <label className="text-xs md:text-sm font-medium">Subject</label>
                     <Input
                       value={formData.subject}
                       onChange={(e) => handleInputChange("subject", e.target.value)}
                       placeholder="How can we help you?"
                       required
+                      className="mt-1"
                     />
                   </div>
                   
                   <div>
-                    <label className="text-sm font-medium">Message</label>
+                    <label className="text-xs md:text-sm font-medium">Message</label>
                     <Textarea
                       value={formData.message}
                       onChange={(e) => handleInputChange("message", e.target.value)}
                       placeholder="Tell us more about your inquiry..."
-                      rows={6}
+                      rows={4}
                       required
+                      className="mt-1"
                     />
                   </div>
                   
@@ -117,49 +125,49 @@ const ContactPage = () => {
             </Card>
 
             {/* Contact Information */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Mail className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                    <Mail className="w-4 h-4 md:w-5 md:h-5" />
                     Email Support
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-sm md:text-base text-muted-foreground mb-2">
                     For general inquiries and support
                   </p>
-                  <p className="font-semibold">support@dpd-tracking.com</p>
+                  <p className="font-semibold text-sm md:text-base break-words">support@dpd-tracking.com</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                    <Phone className="w-4 h-4 md:w-5 md:h-5" />
                     Phone Support
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-sm md:text-base text-muted-foreground mb-2">
                     Speak directly with our support team
                   </p>
-                  <p className="font-semibold">+1 (555) 123-4567</p>
+                  <p className="font-semibold text-sm md:text-base">+1 (555) 123-4567</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                    <MapPin className="w-4 h-4 md:w-5 md:h-5" />
                     Office Address
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-2">
+                  <p className="text-sm md:text-base text-muted-foreground mb-2">
                     Visit us at our headquarters
                   </p>
-                  <p className="font-semibold">
+                  <p className="font-semibold text-sm md:text-base">
                     123 Delivery Street<br />
                     Logistics City, LC 12345<br />
                     United States
@@ -169,22 +177,22 @@ const ContactPage = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                    <Clock className="w-4 h-4 md:w-5 md:h-5" />
                     Business Hours
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
+                  <div className="space-y-1 md:space-y-2">
+                    <div className="flex justify-between text-sm md:text-base">
                       <span className="text-muted-foreground">Monday - Friday:</span>
                       <span className="font-semibold">8:00 AM - 6:00 PM</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm md:text-base">
                       <span className="text-muted-foreground">Saturday:</span>
                       <span className="font-semibold">9:00 AM - 4:00 PM</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm md:text-base">
                       <span className="text-muted-foreground">Sunday:</span>
                       <span className="font-semibold">Closed</span>
                     </div>

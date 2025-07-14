@@ -96,25 +96,29 @@ const TrackingPage = () => {
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">DPD Tracking</h1>
-          <nav className="flex gap-6">
+          <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
+          <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
             <Button variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
           </nav>
+          <nav className="md:hidden flex gap-2">
+            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
+          </nav>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         {/* Search Section */}
-        <Card className="mb-8">
+        <Card className="mb-6 md:mb-8">
           <CardHeader>
-            <CardTitle>Track Your Package</CardTitle>
-            <CardDescription>Enter your tracking number to get the latest updates</CardDescription>
+            <CardTitle className="text-lg md:text-xl">Track Your Package</CardTitle>
+            <CardDescription className="text-sm md:text-base">Enter your tracking number to get the latest updates</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
                 placeholder="Enter tracking number"
                 value={trackingNumber}
@@ -122,7 +126,7 @@ const TrackingPage = () => {
                 onKeyPress={(e) => e.key === 'Enter' && handleTrack()}
                 className="flex-1"
               />
-              <Button onClick={handleTrack} disabled={loading}>
+              <Button onClick={handleTrack} disabled={loading} className="w-full sm:w-auto">
                 {loading ? "Searching..." : "Track"}
               </Button>
             </div>
@@ -131,31 +135,31 @@ const TrackingPage = () => {
 
         {/* Package Information */}
         {packageData && (
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
             {/* Package Details */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                  <Package className="w-4 h-4 md:w-5 md:h-5" />
                   Package Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 md:space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tracking Number</p>
-                  <p className="font-mono font-semibold">{packageData.tracking_number}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">Tracking Number</p>
+                  <p className="font-mono font-semibold text-sm md:text-base">{packageData.tracking_number}</p>
                 </div>
                 
                 <Separator />
                 
                 <div>
-                  <p className="text-sm text-muted-foreground">Current Status</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">Current Status</p>
                   <div className="flex items-center gap-2 mt-1">
                     {(() => {
                       const Icon = statusIcons[packageData.current_status as keyof typeof statusIcons];
                       return <Icon className="w-4 h-4" />;
                     })()}
-                    <Badge variant={statusColors[packageData.current_status as keyof typeof statusColors] as any}>
+                    <Badge variant={statusColors[packageData.current_status as keyof typeof statusColors] as any} className="text-xs">
                       {packageData.current_status.replace(/_/g, ' ').toUpperCase()}
                     </Badge>
                   </div>
@@ -163,42 +167,42 @@ const TrackingPage = () => {
 
                 <Separator />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Recipient</p>
-                    <p className="font-medium">{packageData.recipient_name}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">Recipient</p>
+                    <p className="font-medium text-sm md:text-base">{packageData.recipient_name}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Service Type</p>
-                    <p className="font-medium">{packageData.service_type || "Standard"}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">Service Type</p>
+                    <p className="font-medium text-sm md:text-base">{packageData.service_type || "Standard"}</p>
                   </div>
                 </div>
 
                 <Separator />
 
                 <div>
-                  <p className="text-sm text-muted-foreground">Delivery Address</p>
-                  <p className="font-medium">{packageData.recipient_address}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">Delivery Address</p>
+                  <p className="font-medium text-sm md:text-base break-words">{packageData.recipient_address}</p>
                 </div>
 
                 {packageData.recipient_phone && (
                   <div>
-                    <p className="text-sm text-muted-foreground">Recipient Phone</p>
-                    <p className="font-medium">{packageData.recipient_phone}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">Recipient Phone</p>
+                    <p className="font-medium text-sm md:text-base">{packageData.recipient_phone}</p>
                   </div>
                 )}
 
                 {packageData.recipient_email && (
                   <div>
-                    <p className="text-sm text-muted-foreground">Recipient Email</p>
-                    <p className="font-medium">{packageData.recipient_email}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">Recipient Email</p>
+                    <p className="font-medium text-sm md:text-base break-words">{packageData.recipient_email}</p>
                   </div>
                 )}
 
                 {packageData.weight && (
                   <div>
-                    <p className="text-sm text-muted-foreground">Weight</p>
-                    <p className="font-medium">{packageData.weight} kg</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">Weight</p>
+                    <p className="font-medium text-sm md:text-base">{packageData.weight} kg</p>
                   </div>
                 )}
               </CardContent>
@@ -207,40 +211,40 @@ const TrackingPage = () => {
             {/* Status Timeline */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                  <Clock className="w-4 h-4 md:w-5 md:h-5" />
                   Delivery Timeline
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   {statusHistory.length > 0 ? (
                     statusHistory.map((status, index) => {
                       const Icon = statusIcons[status.status as keyof typeof statusIcons];
                       return (
                         <div key={status.id} className="flex gap-3">
                           <div className="flex flex-col items-center">
-                            <div className="p-2 rounded-full bg-primary/10">
-                              <Icon className="w-4 h-4 text-primary" />
+                            <div className="p-1.5 md:p-2 rounded-full bg-primary/10">
+                              <Icon className="w-3 h-3 md:w-4 md:h-4 text-primary" />
                             </div>
                             {index < statusHistory.length - 1 && (
-                              <div className="w-px h-8 bg-border mt-2" />
+                              <div className="w-px h-6 md:h-8 bg-border mt-2" />
                             )}
                           </div>
-                          <div className="flex-1 pb-4">
-                            <p className="font-medium">
+                          <div className="flex-1 pb-3 md:pb-4">
+                            <p className="font-medium text-sm md:text-base">
                               {status.status.replace(/_/g, ' ').toUpperCase()}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs md:text-sm text-muted-foreground">
                               {new Date(status.created_at).toLocaleString()}
                             </p>
                             {status.location && (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-xs md:text-sm text-muted-foreground">
                                 📍 {status.location}
                               </p>
                             )}
                             {status.notes && status.notes !== "Status updated automatically" && (
-                              <p className="text-sm text-muted-foreground mt-1">
+                              <p className="text-xs md:text-sm text-muted-foreground mt-1">
                                 {status.notes.startsWith("Order #") && status.notes.includes("received from WooCommerce") 
                                   ? status.notes.replace(/received from WooCommerce.*/, "- Information received from store and is registered in our system")
                                   : status.notes}
@@ -251,7 +255,7 @@ const TrackingPage = () => {
                       );
                     })
                   ) : (
-                    <p className="text-muted-foreground">No status updates available yet.</p>
+                    <p className="text-sm md:text-base text-muted-foreground">No status updates available yet.</p>
                   )}
                 </div>
               </CardContent>
