@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Settings, Package, Clock } from "lucide-react";
+import { Plus, Edit, Settings, Package, Clock, Eye } from "lucide-react";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ const AdminPanel = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [packageDetailOpen, setPackageDetailOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<any>(null);
   const [selectedConfig, setSelectedConfig] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [profileForm, setProfileForm] = useState({
@@ -450,18 +452,31 @@ const AdminPanel = () => {
                         <TableCell>{pkg.service_type}</TableCell>
                         <TableCell>{new Date(pkg.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => {
-                              const email = prompt('Enter recipient email:', pkg.recipient_email || '');
-                              if (email !== null) {
-                                updatePackageEmail(pkg.id, email);
-                              }
-                            }}
-                          >
-                            {pkg.recipient_email ? 'Edit Email' : 'Add Email'}
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => {
+                                setSelectedPackage(pkg);
+                                setPackageDetailOpen(true);
+                              }}
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              View Details
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => {
+                                const email = prompt('Enter recipient email:', pkg.recipient_email || '');
+                                if (email !== null) {
+                                  updatePackageEmail(pkg.id, email);
+                                }
+                              }}
+                            >
+                              {pkg.recipient_email ? 'Edit Email' : 'Add Email'}
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -695,6 +710,126 @@ const AdminPanel = () => {
             <div className="flex justify-end gap-2 mt-4">
               <Button variant="outline" onClick={() => setProfileDialogOpen(false)}>Cancel</Button>
               <Button onClick={updateProfile}>Save Changes</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Package Detail View Dialog */}
+        <Dialog open={packageDetailOpen} onOpenChange={setPackageDetailOpen}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>Package Details</DialogTitle>
+              <DialogDescription>Complete information for tracking number: {selectedPackage?.tracking_number}</DialogDescription>
+            </DialogHeader>
+            
+            {selectedPackage && (
+              <div className="grid grid-cols-2 gap-6">
+                {/* Recipient Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Recipient Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Name</Label>
+                      <p className="text-sm font-medium">{selectedPackage.recipient_name}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Email</Label>
+                      <p className="text-sm">{selectedPackage.recipient_email || 'Not provided'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Phone</Label>
+                      <p className="text-sm">{selectedPackage.recipient_phone || 'Not provided'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Address</Label>
+                      <p className="text-sm">{selectedPackage.recipient_address}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Sender Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Sender Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Name</Label>
+                      <p className="text-sm">{selectedPackage.sender_name || 'Not provided'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Address</Label>
+                      <p className="text-sm">{selectedPackage.sender_address || 'Not provided'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Phone</Label>
+                      <p className="text-sm">{selectedPackage.sender_phone || 'Not provided'}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Package Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Package Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Tracking Number</Label>
+                      <p className="text-sm font-mono font-medium">{selectedPackage.tracking_number}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Current Status</Label>
+                      <Badge variant="outline" className="mt-1">
+                        {selectedPackage.current_status.replace(/_/g, ' ').toUpperCase()}
+                      </Badge>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Service Type</Label>
+                      <p className="text-sm">{selectedPackage.service_type || 'Standard'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Weight</Label>
+                      <p className="text-sm">{selectedPackage.weight ? `${selectedPackage.weight} kg` : 'Not specified'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Dimensions</Label>
+                      <p className="text-sm">{selectedPackage.dimensions || 'Not specified'}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* System Information */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">System Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Package ID</Label>
+                      <p className="text-sm font-mono">{selectedPackage.id}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">WooCommerce Order ID</Label>
+                      <p className="text-sm">{selectedPackage.woocommerce_order_id || 'Not from WooCommerce'}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Created</Label>
+                      <p className="text-sm">{new Date(selectedPackage.created_at).toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Last Updated</Label>
+                      <p className="text-sm">{new Date(selectedPackage.updated_at).toLocaleString()}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+            
+            <div className="flex justify-end gap-2 mt-4">
+              <Button variant="outline" onClick={() => setPackageDetailOpen(false)}>Close</Button>
             </div>
           </DialogContent>
         </Dialog>
