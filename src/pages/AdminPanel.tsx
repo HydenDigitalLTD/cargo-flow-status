@@ -74,7 +74,7 @@ const AdminPanel = () => {
       const { data: configsData } = await supabase
         .from("status_configs")
         .select("*")
-        .order("hours_after_previous", { ascending: true });
+        .order("status_order", { ascending: true });
 
       setPackages(packagesData || []);
       setStatusConfigs(configsData || []);
@@ -155,6 +155,7 @@ const AdminPanel = () => {
       const { error } = await supabase
         .from("status_configs")
         .update({
+          status_order: selectedConfig.status_order,
           hours_after_previous: selectedConfig.hours_after_previous || 0,
           days_after_previous: selectedConfig.days_after_previous || 0,
           minutes_after_previous: selectedConfig.minutes_after_previous || 0,
@@ -513,9 +514,10 @@ const AdminPanel = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>Order</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Display Name</TableHead>
-                      <TableHead>Time After Previous</TableHead>
+                      <TableHead>Duration in Status</TableHead>
                       <TableHead>Description</TableHead>
                       <TableHead>Active</TableHead>
                       <TableHead>Actions</TableHead>
@@ -533,6 +535,7 @@ const AdminPanel = () => {
 
                       return (
                         <TableRow key={config.id}>
+                          <TableCell className="font-bold text-center">{config.status_order}</TableCell>
                           <TableCell className="font-mono">{config.status}</TableCell>
                           <TableCell>{config.display_name}</TableCell>
                           <TableCell className="flex items-center gap-1">
@@ -573,6 +576,16 @@ const AdminPanel = () => {
                     {selectedConfig && (
                       <div className="space-y-4">
                         <div>
+                          <Label>Status Order (1=first, 2=second, etc.)</Label>
+                          <Input
+                            type="number"
+                            min="1"
+                            value={selectedConfig.status_order || 1}
+                            onChange={(e) => setSelectedConfig({...selectedConfig, status_order: parseInt(e.target.value) || 1})}
+                          />
+                        </div>
+                        
+                        <div>
                           <Label>Display Name</Label>
                           <Input
                             value={selectedConfig.display_name}
@@ -582,7 +595,7 @@ const AdminPanel = () => {
                         
                         <div className="grid grid-cols-3 gap-4">
                           <div>
-                            <Label>Days After Previous</Label>
+                            <Label>Days to Stay in Status</Label>
                             <Input
                               type="number"
                               min="0"
@@ -591,7 +604,7 @@ const AdminPanel = () => {
                             />
                           </div>
                           <div>
-                            <Label>Hours After Previous</Label>
+                            <Label>Hours to Stay in Status</Label>
                             <Input
                               type="number"
                               min="0"
@@ -601,7 +614,7 @@ const AdminPanel = () => {
                             />
                           </div>
                           <div>
-                            <Label>Minutes After Previous</Label>
+                            <Label>Minutes to Stay in Status</Label>
                             <Input
                               type="number"
                               min="0"
