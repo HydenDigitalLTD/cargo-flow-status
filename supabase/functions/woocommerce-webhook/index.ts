@@ -176,6 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
       recipient_name: `${order.billing.first_name} ${order.billing.last_name}`.trim(),
       recipient_address: formatAddress(order.shipping.first_name ? order.shipping : order.billing),
       recipient_phone: order.billing.phone || null,
+      recipient_email: order.billing.email || null, // Add the recipient email from WooCommerce
       service_type: 'standard',
       current_status: 'registered',
       // You can add weight and dimensions if available in WooCommerce
