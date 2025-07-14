@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Clock, Package } from "lucide-react";
+import { Mail, MapPin, Clock, Package } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactPage = () => {
@@ -140,20 +140,6 @@ const ContactPage = () => {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
-                    <Phone className="w-4 h-4 md:w-5 md:h-5" />
-                    Phone Support
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm md:text-base text-muted-foreground mb-2">
-                    Speak directly with our support team
-                  </p>
-                  <p className="font-semibold text-sm md:text-base">+1 (555) 123-4567</p>
-                </CardContent>
-              </Card>
 
               <Card>
                 <CardHeader>
@@ -167,9 +153,9 @@ const ContactPage = () => {
                     Visit us at our headquarters
                   </p>
                   <p className="font-semibold text-sm md:text-base">
-                    123 Delivery Street<br />
-                    Logistics City, LC 12345<br />
-                    United States
+                    Keizersgracht 482<br />
+                    1017 EG Amsterdam<br />
+                    Netherlands
                   </p>
                 </CardContent>
               </Card>
