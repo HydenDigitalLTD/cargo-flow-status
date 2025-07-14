@@ -51,7 +51,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const trackingUrl = `https://yxppflscazhgoikzzxha.supabase.co/track?number=${trackingNumber}`;
+    const trackingUrl = `https://gl-express.eu/tracking?number=${trackingNumber}`;
 
     const emailHtml = `
     <!DOCTYPE html>
