@@ -188,6 +188,13 @@ const TrackingPage = () => {
                   </div>
                 )}
 
+                {packageData.recipient_email && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Recipient Email</p>
+                    <p className="font-medium">{packageData.recipient_email}</p>
+                  </div>
+                )}
+
                 {packageData.weight && (
                   <div>
                     <p className="text-sm text-muted-foreground">Weight</p>

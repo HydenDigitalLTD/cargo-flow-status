@@ -86,6 +86,7 @@ export type Database = {
           dimensions: string | null
           id: string
           recipient_address: string
+          recipient_email: string | null
           recipient_name: string
           recipient_phone: string | null
           sender_address: string | null
@@ -103,6 +104,7 @@ export type Database = {
           dimensions?: string | null
           id?: string
           recipient_address: string
+          recipient_email?: string | null
           recipient_name: string
           recipient_phone?: string | null
           sender_address?: string | null
@@ -120,6 +122,7 @@ export type Database = {
           dimensions?: string | null
           id?: string
           recipient_address?: string
+          recipient_email?: string | null
           recipient_name?: string
           recipient_phone?: string | null
           sender_address?: string | null

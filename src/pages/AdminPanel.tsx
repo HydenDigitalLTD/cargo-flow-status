@@ -39,6 +39,7 @@ const AdminPanel = () => {
     recipient_name: "",
     recipient_address: "",
     recipient_phone: "",
+    recipient_email: "",
     sender_name: "",
     sender_address: "",
     weight: "",
@@ -127,6 +128,7 @@ const AdminPanel = () => {
         recipient_name: "",
         recipient_address: "",
         recipient_phone: "",
+        recipient_email: "",
         sender_name: "",
         sender_address: "",
         weight: "",
@@ -337,6 +339,15 @@ const AdminPanel = () => {
                             value={newPackage.recipient_phone}
                             onChange={(e) => setNewPackage({...newPackage, recipient_phone: e.target.value})}
                             placeholder="Phone number"
+                          />
+                        </div>
+                        <div>
+                          <Label>Recipient Email</Label>
+                          <Input
+                            type="email"
+                            value={newPackage.recipient_email}
+                            onChange={(e) => setNewPackage({...newPackage, recipient_email: e.target.value})}
+                            placeholder="Email address"
                           />
                         </div>
                         <div className="col-span-2">
