@@ -248,6 +248,30 @@ const AdminPanel = () => {
     }
   };
 
+  const updatePackageEmail = async (packageId: string, email: string) => {
+    try {
+      const { error } = await supabase
+        .from("packages")
+        .update({ recipient_email: email })
+        .eq("id", packageId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Package email updated successfully"
+      });
+
+      loadData(); // Reload to show updated email
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update package email",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
@@ -403,13 +427,21 @@ const AdminPanel = () => {
                       <TableHead>Status</TableHead>
                       <TableHead>Service</TableHead>
                       <TableHead>Created</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {packages.map((pkg) => (
                       <TableRow key={pkg.id}>
                         <TableCell className="font-mono">{pkg.tracking_number}</TableCell>
-                        <TableCell>{pkg.recipient_name}</TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{pkg.recipient_name}</p>
+                            {pkg.recipient_email && (
+                              <p className="text-sm text-muted-foreground">📧 {pkg.recipient_email}</p>
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline">
                             {pkg.current_status.replace(/_/g, ' ').toUpperCase()}
@@ -417,6 +449,20 @@ const AdminPanel = () => {
                         </TableCell>
                         <TableCell>{pkg.service_type}</TableCell>
                         <TableCell>{new Date(pkg.created_at).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              const email = prompt('Enter recipient email:', pkg.recipient_email || '');
+                              if (email !== null) {
+                                updatePackageEmail(pkg.id, email);
+                              }
+                            }}
+                          >
+                            {pkg.recipient_email ? 'Edit Email' : 'Add Email'}
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
