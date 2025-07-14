@@ -148,7 +148,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "GL Express <notifications@glexpress.com>",
+      from: "GL Express <notifications@gl-express.eu>",
       to: [recipientEmail],
       subject: `📦 Your GL Express package ${trackingNumber} is on its way!`,
       html: emailHtml,
