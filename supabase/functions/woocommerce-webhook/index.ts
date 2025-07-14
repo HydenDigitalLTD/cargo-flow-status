@@ -213,6 +213,28 @@ const handler = async (req: Request): Promise<Response> => {
       // Don't throw here as the package was created successfully
     }
 
+    // Send tracking email if recipient email is available
+    if (order.billing?.email) {
+      try {
+        const emailResponse = await supabase.functions.invoke('send-tracking-email', {
+          body: {
+            packageId: packageResult.id,
+            recipientEmail: order.billing.email,
+            recipientName: `${order.billing.first_name} ${order.billing.last_name}`.trim(),
+            trackingNumber: trackingNumber
+          }
+        });
+        
+        if (emailResponse.error) {
+          console.error('Error sending tracking email:', emailResponse.error);
+        } else {
+          console.log('Tracking email sent successfully');
+        }
+      } catch (emailError) {
+        console.error('Failed to send tracking email:', emailError);
+      }
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
