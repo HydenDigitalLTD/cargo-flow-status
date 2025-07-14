@@ -48,7 +48,7 @@ const HomePage = () => {
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
-            <Button variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
+            <Button variant="outline" onClick={() => navigate("/auth")}>Admin Login</Button>
           </nav>
         </div>
       </header>
