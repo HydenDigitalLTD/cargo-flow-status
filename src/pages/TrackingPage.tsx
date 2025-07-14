@@ -262,6 +262,49 @@ const TrackingPage = () => {
           </div>
         )}
       </div>
+
+      {/* Footer */}
+      <footer className="bg-card py-12 md:py-16 border-t">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-6 md:mb-8">
+            <div>
+              <div className="flex items-center gap-2 md:gap-3 mb-4">
+                <div className="p-1.5 md:p-2 bg-primary rounded-lg">
+                  <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+                </div>
+                <h4 className="text-lg md:text-xl font-bold text-primary">DPD Tracking</h4>
+              </div>
+              <p className="text-sm md:text-base text-muted-foreground mb-6">
+                Leading the way in modern package delivery and tracking solutions worldwide.
+              </p>
+            </div>
+            
+            <div>
+              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-lg md:text-xl">Subscribe to Newsletter</h5>
+              <p className="text-sm md:text-base text-muted-foreground mb-4">
+                Get the latest updates on shipping, tracking features, and exclusive offers delivered to your inbox.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1"
+                />
+                <Button className="bg-primary hover:bg-primary/90">
+                  Subscribe
+                </Button>
+              </div>
+              <p className="text-xs md:text-sm text-muted-foreground mt-2">
+                We respect your privacy. Unsubscribe at any time.
+              </p>
+            </div>
+          </div>
+          
+          <div className="border-t pt-6 md:pt-8 text-center text-muted-foreground">
+            <p className="text-xs md:text-sm">&copy; 2024 DPD Tracking. All rights reserved. Built with ❤️ for better shipping.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
