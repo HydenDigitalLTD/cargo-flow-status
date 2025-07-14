@@ -106,14 +106,22 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const body = await req.text();
     console.log('Received webhook body:', body);
+    console.log('Content-Length:', req.headers.get('content-length'));
     
-    if (!body) {
-      throw new Error('Empty request body');
+    if (!body || body.trim() === '') {
+      console.log('Empty body received - likely a test webhook');
+      return new Response(
+        JSON.stringify({ success: true, message: 'Test webhook received' }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        }
+      );
     }
 
-    // Verify webhook signature for security
+    // Verify webhook signature for security (only if signature is present)
     const signature = req.headers.get('x-wc-webhook-signature');
-    if (signature) {
+    if (signature && webhookSecret) {
       const isValidSignature = await verifyWebhookSignature(body, signature);
       if (!isValidSignature) {
         console.error('Invalid webhook signature');
@@ -127,18 +135,31 @@ const handler = async (req: Request): Promise<Response> => {
       }
       console.log('Webhook signature verified successfully');
     } else {
-      console.warn('No signature provided in webhook request');
+      console.log('No signature verification (test mode or no secret configured)');
     }
 
-    let order: WooCommerceOrder;
+    let order: any;
     try {
       order = JSON.parse(body);
     } catch (parseError) {
       console.error('JSON parse error:', parseError);
+      console.error('Body content:', body);
       throw new Error('Invalid JSON in request body');
     }
 
-    console.log('Parsed WooCommerce order:', order.id);
+    // Handle test webhooks that don't have order structure
+    if (!order.id) {
+      console.log('Received webhook without order ID - likely a test');
+      return new Response(
+        JSON.stringify({ success: true, message: 'Webhook received but no order data' }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        }
+      );
+    }
+
+    console.log('Processing WooCommerce order:', order.id);
 
     // Generate tracking number
     const trackingNumber = generateTrackingNumber();
