@@ -151,7 +151,9 @@ const AdminPanel = () => {
       const { error } = await supabase
         .from("status_configs")
         .update({
-          hours_after_previous: selectedConfig.hours_after_previous,
+          hours_after_previous: selectedConfig.hours_after_previous || 0,
+          days_after_previous: selectedConfig.days_after_previous || 0,
+          minutes_after_previous: selectedConfig.minutes_after_previous || 0,
           display_name: selectedConfig.display_name,
           description: selectedConfig.description,
           is_active: selectedConfig.is_active
@@ -174,6 +176,30 @@ const AdminPanel = () => {
         description: "Failed to update configuration",
         variant: "destructive"
       });
+    }
+  };
+
+  const triggerAutoUpdate = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.functions.invoke('auto-status-update');
+      
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Automatic status update triggered successfully"
+      });
+      
+      loadData(); // Reload to show updated statuses
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to trigger automatic update",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -392,13 +418,24 @@ const AdminPanel = () => {
           <TabsContent value="settings">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="w-5 h-5" />
-                  Status Timing Configuration
-                </CardTitle>
-                <CardDescription>
-                  Configure when status updates should trigger automatically
-                </CardDescription>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Settings className="w-5 h-5" />
+                      Status Timing Configuration
+                    </CardTitle>
+                    <CardDescription>
+                      Configure when status updates should trigger automatically
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    onClick={triggerAutoUpdate} 
+                    disabled={loading}
+                    variant="outline"
+                  >
+                    {loading ? "Updating..." : "Trigger Auto Update"}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -406,41 +443,51 @@ const AdminPanel = () => {
                     <TableRow>
                       <TableHead>Status</TableHead>
                       <TableHead>Display Name</TableHead>
-                      <TableHead>Hours After Previous</TableHead>
+                      <TableHead>Time After Previous</TableHead>
                       <TableHead>Description</TableHead>
                       <TableHead>Active</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {statusConfigs.map((config) => (
-                      <TableRow key={config.id}>
-                        <TableCell className="font-mono">{config.status}</TableCell>
-                        <TableCell>{config.display_name}</TableCell>
-                        <TableCell className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {config.hours_after_previous}h
-                        </TableCell>
-                        <TableCell className="max-w-xs truncate">{config.description}</TableCell>
-                        <TableCell>
-                          <Badge variant={config.is_active ? "default" : "secondary"}>
-                            {config.is_active ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedConfig(config);
-                              setConfigDialogOpen(true);
-                            }}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {statusConfigs.map((config) => {
+                      const formatTime = () => {
+                        const parts = [];
+                        if (config.days_after_previous > 0) parts.push(`${config.days_after_previous}d`);
+                        if (config.hours_after_previous > 0) parts.push(`${config.hours_after_previous}h`);
+                        if (config.minutes_after_previous > 0) parts.push(`${config.minutes_after_previous}m`);
+                        return parts.length > 0 ? parts.join(' ') : '0m';
+                      };
+
+                      return (
+                        <TableRow key={config.id}>
+                          <TableCell className="font-mono">{config.status}</TableCell>
+                          <TableCell>{config.display_name}</TableCell>
+                          <TableCell className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {formatTime()}
+                          </TableCell>
+                          <TableCell className="max-w-xs truncate">{config.description}</TableCell>
+                          <TableCell>
+                            <Badge variant={config.is_active ? "default" : "secondary"}>
+                              {config.is_active ? "Active" : "Inactive"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setSelectedConfig(config);
+                                setConfigDialogOpen(true);
+                              }}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
 
@@ -460,14 +507,39 @@ const AdminPanel = () => {
                             onChange={(e) => setSelectedConfig({...selectedConfig, display_name: e.target.value})}
                           />
                         </div>
-                        <div>
-                          <Label>Hours After Previous Status</Label>
-                          <Input
-                            type="number"
-                            value={selectedConfig.hours_after_previous}
-                            onChange={(e) => setSelectedConfig({...selectedConfig, hours_after_previous: parseInt(e.target.value)})}
-                          />
+                        
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <Label>Days After Previous</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              value={selectedConfig.days_after_previous || 0}
+                              onChange={(e) => setSelectedConfig({...selectedConfig, days_after_previous: parseInt(e.target.value) || 0})}
+                            />
+                          </div>
+                          <div>
+                            <Label>Hours After Previous</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              max="23"
+                              value={selectedConfig.hours_after_previous || 0}
+                              onChange={(e) => setSelectedConfig({...selectedConfig, hours_after_previous: parseInt(e.target.value) || 0})}
+                            />
+                          </div>
+                          <div>
+                            <Label>Minutes After Previous</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              max="59"
+                              value={selectedConfig.minutes_after_previous || 0}
+                              onChange={(e) => setSelectedConfig({...selectedConfig, minutes_after_previous: parseInt(e.target.value) || 0})}
+                            />
+                          </div>
                         </div>
+                        
                         <div>
                           <Label>Description</Label>
                           <Textarea

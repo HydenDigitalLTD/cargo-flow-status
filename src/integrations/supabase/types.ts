@@ -160,31 +160,37 @@ export type Database = {
       status_configs: {
         Row: {
           created_at: string
+          days_after_previous: number | null
           description: string | null
           display_name: string
           hours_after_previous: number
           id: string
           is_active: boolean
+          minutes_after_previous: number | null
           status: Database["public"]["Enums"]["package_status"]
           updated_at: string
         }
         Insert: {
           created_at?: string
+          days_after_previous?: number | null
           description?: string | null
           display_name: string
           hours_after_previous?: number
           id?: string
           is_active?: boolean
+          minutes_after_previous?: number | null
           status: Database["public"]["Enums"]["package_status"]
           updated_at?: string
         }
         Update: {
           created_at?: string
+          days_after_previous?: number | null
           description?: string | null
           display_name?: string
           hours_after_previous?: number
           id?: string
           is_active?: boolean
+          minutes_after_previous?: number | null
           status?: Database["public"]["Enums"]["package_status"]
           updated_at?: string
         }
@@ -206,6 +212,10 @@ export type Database = {
       is_authenticated_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      trigger_auto_update: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {
