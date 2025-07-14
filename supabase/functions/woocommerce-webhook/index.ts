@@ -9,7 +9,30 @@ const corsHeaders = {
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const webhookSecret = Deno.env.get('WOOCOMMERCE_WEBHOOK_SECRET')!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+// Function to verify webhook signature
+async function verifyWebhookSignature(body: string, signature: string): Promise<boolean> {
+  if (!signature || !webhookSecret) {
+    return false;
+  }
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(webhookSecret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const expectedSignature = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+  const expectedSignatureBase64 = btoa(String.fromCharCode(...new Uint8Array(expectedSignature)));
+  
+  // WooCommerce sends signature as base64
+  return signature === expectedSignatureBase64;
+}
 
 interface WooCommerceOrder {
   id: number;
@@ -86,6 +109,25 @@ const handler = async (req: Request): Promise<Response> => {
     
     if (!body) {
       throw new Error('Empty request body');
+    }
+
+    // Verify webhook signature for security
+    const signature = req.headers.get('x-wc-webhook-signature');
+    if (signature) {
+      const isValidSignature = await verifyWebhookSignature(body, signature);
+      if (!isValidSignature) {
+        console.error('Invalid webhook signature');
+        return new Response(
+          JSON.stringify({ success: false, error: 'Invalid signature' }),
+          {
+            status: 401,
+            headers: { 'Content-Type': 'application/json', ...corsHeaders }
+          }
+        );
+      }
+      console.log('Webhook signature verified successfully');
+    } else {
+      console.warn('No signature provided in webhook request');
     }
 
     let order: WooCommerceOrder;
