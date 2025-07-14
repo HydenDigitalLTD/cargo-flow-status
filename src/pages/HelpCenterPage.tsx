@@ -102,17 +102,21 @@ const HelpCenterPage = () => {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary rounded-lg">
-              <Package className="w-6 h-6 text-primary-foreground" />
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-primary rounded-lg">
+              <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-primary">DPD Tracking</h1>
+            <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
           </div>
-          <nav className="flex gap-6">
+          <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
             <Button variant="outline" onClick={() => navigate("/auth")}>Admin Login</Button>
+          </nav>
+          <nav className="md:hidden flex gap-2">
+            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/auth")}>Login</Button>
           </nav>
         </div>
       </header>

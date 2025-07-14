@@ -57,17 +57,21 @@ const ExpressDeliveryPage = () => {
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary rounded-lg">
-              <Package className="w-6 h-6 text-primary-foreground" />
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-primary rounded-lg">
+              <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-primary">DPD Tracking</h1>
+            <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
           </div>
-          <nav className="flex gap-6">
+          <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
             <Button variant="outline" onClick={() => navigate("/auth")}>Admin Login</Button>
+          </nav>
+          <nav className="md:hidden flex gap-2">
+            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/auth")}>Login</Button>
           </nav>
         </div>
       </header>
@@ -223,54 +227,54 @@ const ExpressDeliveryPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-card py-16 border-t">
+      <footer className="bg-card py-12 md:py-16 border-t">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-primary rounded-lg">
-                  <Package className="w-6 h-6 text-primary-foreground" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
+            <div className="col-span-1 md:col-span-1">
+              <div className="flex items-center gap-2 md:gap-3 mb-4">
+                <div className="p-1.5 md:p-2 bg-primary rounded-lg">
+                  <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
                 </div>
-                <h4 className="text-xl font-bold text-primary">DPD Tracking</h4>
+                <h4 className="text-lg md:text-xl font-bold text-primary">DPD Tracking</h4>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-sm md:text-base text-muted-foreground">
                 Leading the way in modern package delivery and tracking solutions worldwide.
               </p>
             </div>
             
             <div>
-              <h5 className="font-semibold mb-4 text-foreground">Services</h5>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="/tracking" className="hover:text-primary transition-colors">Package Tracking</Link></li>
-                <li><Link to="/express-delivery" className="hover:text-primary transition-colors">Express Delivery</Link></li>
-                <li><Link to="/international-shipping" className="hover:text-primary transition-colors">International Shipping</Link></li>
-                <li><Link to="/business-solutions" className="hover:text-primary transition-colors">Business Solutions</Link></li>
+              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-sm md:text-base">Services</h5>
+              <ul className="space-y-1 md:space-y-2 text-muted-foreground text-sm md:text-base">
+                <li><Link to="/tracking" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Package Tracking</Link></li>
+                <li><Link to="/express-delivery" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Express Delivery</Link></li>
+                <li><Link to="/international-shipping" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">International Shipping</Link></li>
+                <li><Link to="/business-solutions" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Business Solutions</Link></li>
               </ul>
             </div>
             
             <div>
-              <h5 className="font-semibold mb-4 text-foreground">Support</h5>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="/help-center" className="hover:text-primary transition-colors">Help Center</Link></li>
-                <li><Link to="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-                <li><Link to="/tracking" className="hover:text-primary transition-colors">Track Package</Link></li>
-                <li><Link to="/shipping-calculator" className="hover:text-primary transition-colors">Shipping Calculator</Link></li>
+              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-sm md:text-base">Support</h5>
+              <ul className="space-y-1 md:space-y-2 text-muted-foreground text-sm md:text-base">
+                <li><Link to="/help-center" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Contact Us</Link></li>
+                <li><Link to="/tracking" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Track Package</Link></li>
+                <li><Link to="/shipping-calculator" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Shipping Calculator</Link></li>
               </ul>
             </div>
             
             <div>
-              <h5 className="font-semibold mb-4 text-foreground">Company</h5>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-                <li><Link to="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
-                <li><Link to="/press" className="hover:text-primary transition-colors">Press</Link></li>
-                <li><Link to="/partnerships" className="hover:text-primary transition-colors">Partnerships</Link></li>
+              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-sm md:text-base">Company</h5>
+              <ul className="space-y-1 md:space-y-2 text-muted-foreground text-sm md:text-base">
+                <li><Link to="/about" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link to="/careers" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Careers</Link></li>
+                <li><Link to="/press" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Press</Link></li>
+                <li><Link to="/partnerships" onClick={() => window.scrollTo(0, 0)} className="hover:text-primary transition-colors">Partnerships</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 DPD Tracking. All rights reserved. Built with ❤️ for better shipping.</p>
+          <div className="border-t pt-6 md:pt-8 text-center text-muted-foreground">
+            <p className="text-xs md:text-sm">&copy; 2024 DPD Tracking. All rights reserved. Built with ❤️ for better shipping.</p>
           </div>
         </div>
       </footer>
