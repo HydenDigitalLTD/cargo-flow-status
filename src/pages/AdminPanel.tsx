@@ -13,7 +13,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Settings, Package, Clock, Eye } from "lucide-react";
+import { Plus, Edit, Settings, Package, Clock, Eye, Trash2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const AdminPanel = () => {
   const [packages, setPackages] = useState<any[]>([]);
   const [statusConfigs, setStatusConfigs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
@@ -280,6 +283,57 @@ const AdminPanel = () => {
     navigate("/auth");
   };
 
+  const togglePackageSelection = (packageId: string) => {
+    setSelectedPackages(prev => 
+      prev.includes(packageId) 
+        ? prev.filter(id => id !== packageId)
+        : [...prev, packageId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPackages([]);
+    } else {
+      setSelectedPackages(packages.map(pkg => pkg.id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const deleteSelectedPackages = async () => {
+    if (selectedPackages.length === 0) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${selectedPackages.length} package(s)? This action cannot be undone.`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from("packages")
+        .delete()
+        .in("id", selectedPackages);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `${selectedPackages.length} package(s) deleted successfully`
+      });
+
+      setSelectedPackages([]);
+      setSelectAll(false);
+      loadData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete packages",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -317,7 +371,19 @@ const AdminPanel = () => {
                     <CardDescription>Manage all packages in the system</CardDescription>
                   </div>
                   
-                  <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                  <div className="flex gap-2">
+                    {selectedPackages.length > 0 && (
+                      <Button 
+                        variant="destructive" 
+                        onClick={deleteSelectedPackages}
+                        disabled={loading}
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete Selected ({selectedPackages.length})
+                      </Button>
+                    )}
+                    
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="w-4 h-4 mr-2" />
@@ -419,12 +485,20 @@ const AdminPanel = () => {
                       </div>
                     </DialogContent>
                   </Dialog>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-12">
+                        <Checkbox
+                          checked={selectAll}
+                          onCheckedChange={toggleSelectAll}
+                          aria-label="Select all packages"
+                        />
+                      </TableHead>
                       <TableHead>Tracking Number</TableHead>
                       <TableHead>Recipient</TableHead>
                       <TableHead>Status</TableHead>
@@ -436,6 +510,13 @@ const AdminPanel = () => {
                   <TableBody>
                     {packages.map((pkg) => (
                       <TableRow key={pkg.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedPackages.includes(pkg.id)}
+                            onCheckedChange={() => togglePackageSelection(pkg.id)}
+                            aria-label={`Select package ${pkg.tracking_number}`}
+                          />
+                        </TableCell>
                         <TableCell className="font-mono">{pkg.tracking_number}</TableCell>
                         <TableCell>
                           <div>
