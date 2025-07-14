@@ -239,9 +239,11 @@ const TrackingPage = () => {
                                 📍 {status.location}
                               </p>
                             )}
-                            {status.notes && (
+                            {status.notes && status.notes !== "Status updated automatically" && (
                               <p className="text-sm text-muted-foreground mt-1">
-                                {status.notes}
+                                {status.notes.startsWith("Order #") && status.notes.includes("received from WooCommerce") 
+                                  ? status.notes.replace(/received from WooCommerce.*/, "- Information received from store and is registered in our system")
+                                  : status.notes}
                               </p>
                             )}
                           </div>
