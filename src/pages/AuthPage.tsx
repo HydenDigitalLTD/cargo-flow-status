@@ -45,7 +45,7 @@ const AuthPage = () => {
 
       if (signInError) {
         // If user doesn't exist and it's the default admin credentials, create the user
-        if (formData.email === "admin@admin.com" && formData.password === "admin" && 
+        if (formData.email === "admin@admin.com" && formData.password === "admin123" && 
             signInError.message.includes("Invalid login credentials")) {
           
           const { error: signUpError } = await supabase.auth.signUp({
