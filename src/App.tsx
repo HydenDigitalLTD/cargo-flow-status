@@ -9,6 +9,15 @@ import ContactPage from "./pages/ContactPage";
 import AdminPanel from "./pages/AdminPanel";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import AboutPage from "./pages/AboutPage";
+import ExpressDeliveryPage from "./pages/ExpressDeliveryPage";
+import InternationalShippingPage from "./pages/InternationalShippingPage";
+import BusinessSolutionsPage from "./pages/BusinessSolutionsPage";
+import HelpCenterPage from "./pages/HelpCenterPage";
+import ShippingCalculatorPage from "./pages/ShippingCalculatorPage";
+import CareersPage from "./pages/CareersPage";
+import PressPage from "./pages/PressPage";
+import PartnershipsPage from "./pages/PartnershipsPage";
 import { AuthProvider } from "@/components/AuthProvider";
 
 const queryClient = new QueryClient();
@@ -26,6 +35,15 @@ const App = () => (
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/express-delivery" element={<ExpressDeliveryPage />} />
+            <Route path="/international-shipping" element={<InternationalShippingPage />} />
+            <Route path="/business-solutions" element={<BusinessSolutionsPage />} />
+            <Route path="/help-center" element={<HelpCenterPage />} />
+            <Route path="/shipping-calculator" element={<ShippingCalculatorPage />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route path="/press" element={<PressPage />} />
+            <Route path="/partnerships" element={<PartnershipsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
