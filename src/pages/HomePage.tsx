@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -267,30 +267,30 @@ const HomePage = () => {
             <div>
               <h5 className="font-semibold mb-4 text-foreground">Services</h5>
               <ul className="space-y-2 text-muted-foreground">
-                <li>Package Tracking</li>
-                <li>Express Delivery</li>
-                <li>International Shipping</li>
-                <li>Business Solutions</li>
+                <li><Link to="/tracking" className="hover:text-primary transition-colors">Package Tracking</Link></li>
+                <li><Link to="/express-delivery" className="hover:text-primary transition-colors">Express Delivery</Link></li>
+                <li><Link to="/international-shipping" className="hover:text-primary transition-colors">International Shipping</Link></li>
+                <li><Link to="/business-solutions" className="hover:text-primary transition-colors">Business Solutions</Link></li>
               </ul>
             </div>
             
             <div>
               <h5 className="font-semibold mb-4 text-foreground">Support</h5>
               <ul className="space-y-2 text-muted-foreground">
-                <li>Help Center</li>
-                <li>Contact Us</li>
-                <li>Track Package</li>
-                <li>Shipping Calculator</li>
+                <li><Link to="/help-center" className="hover:text-primary transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+                <li><Link to="/tracking" className="hover:text-primary transition-colors">Track Package</Link></li>
+                <li><Link to="/shipping-calculator" className="hover:text-primary transition-colors">Shipping Calculator</Link></li>
               </ul>
             </div>
             
             <div>
               <h5 className="font-semibold mb-4 text-foreground">Company</h5>
               <ul className="space-y-2 text-muted-foreground">
-                <li>About Us</li>
-                <li>Careers</li>
-                <li>Press</li>
-                <li>Partnerships</li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link to="/careers" className="hover:text-primary transition-colors">Careers</Link></li>
+                <li><Link to="/press" className="hover:text-primary transition-colors">Press</Link></li>
+                <li><Link to="/partnerships" className="hover:text-primary transition-colors">Partnerships</Link></li>
               </ul>
             </div>
           </div>
