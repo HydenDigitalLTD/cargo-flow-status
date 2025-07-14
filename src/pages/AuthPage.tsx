@@ -93,7 +93,7 @@ const AuthPage = () => {
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Admin Sign In</CardTitle>
-            <CardDescription>Access the DPD Admin Panel</CardDescription>
+            <CardDescription>Access the GL Express Admin Panel</CardDescription>
           </CardHeader>
           <CardContent>
             {error && (

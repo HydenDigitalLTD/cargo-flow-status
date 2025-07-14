@@ -48,7 +48,7 @@ const AboutPage = () => {
             <div className="p-1.5 md:p-2 bg-primary rounded-lg">
               <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
             </div>
-            <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
+            <h1 className="text-lg md:text-2xl font-bold text-primary">GL Express</h1>
           </div>
           <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
@@ -66,7 +66,7 @@ const AboutPage = () => {
       <section className="py-12 md:py-20 bg-gradient-to-br from-primary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
           <Badge className="mb-4 md:mb-6 bg-primary/10 text-primary border-primary/20 text-xs md:text-sm">
-            🏢 About DPD Tracking
+            🏢 About GL Express
           </Badge>
           <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 text-foreground">
             Connecting the World
@@ -207,7 +207,7 @@ const AboutPage = () => {
                 <div className="p-1.5 md:p-2 bg-primary rounded-lg">
                   <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
                 </div>
-                <h4 className="text-lg md:text-xl font-bold text-primary">DPD Tracking</h4>
+                <h4 className="text-lg md:text-xl font-bold text-primary">GL Express</h4>
               </div>
               <p className="text-sm md:text-base text-muted-foreground mb-6">
                 Leading the way in modern package delivery and tracking solutions worldwide.
@@ -236,7 +236,7 @@ const AboutPage = () => {
           </div>
           
           <div className="border-t pt-6 md:pt-8 text-center text-muted-foreground">
-            <p className="text-xs md:text-sm">&copy; 2024 DPD Tracking. All rights reserved. Built with ❤️ for better shipping.</p>
+            <p className="text-xs md:text-sm">&copy; 2024 GL Express. All rights reserved. Built with ❤️ for better shipping.</p>
           </div>
         </div>
       </footer>

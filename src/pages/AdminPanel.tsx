@@ -285,7 +285,7 @@ const AdminPanel = () => {
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">DPD Admin Panel</h1>
+          <h1 className="text-2xl font-bold text-primary">GL Express Admin Panel</h1>
           <nav className="flex gap-6 items-center">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>

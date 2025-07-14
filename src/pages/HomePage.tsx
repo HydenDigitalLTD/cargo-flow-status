@@ -54,19 +54,19 @@ const HomePage = () => {
     {
       name: "Sarah Johnson",
       role: "Business Owner",
-      content: "DPD's tracking system is incredibly accurate. I always know exactly where my packages are.",
+      content: "GL Express's tracking system is incredibly accurate. I always know exactly where my packages are.",
       rating: 5
     },
     {
       name: "Mike Chen", 
       role: "Online Shopper",
-      content: "Fast, reliable, and professional. DPD never disappoints with their delivery service.",
+      content: "Fast, reliable, and professional. GL Express never disappoints with their delivery service.",
       rating: 5
     },
     {
       name: "Emma Davis",
       role: "E-commerce Manager", 
-      content: "The real-time updates and professional handling make DPD our go-to shipping partner.",
+      content: "The real-time updates and professional handling make GL Express our go-to shipping partner.",
       rating: 5
     }
   ];
@@ -80,7 +80,7 @@ const HomePage = () => {
             <div className="p-1.5 md:p-2 bg-primary rounded-lg">
               <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
             </div>
-            <h1 className="text-lg md:text-2xl font-bold text-primary">DPD Tracking</h1>
+            <h1 className="text-lg md:text-2xl font-bold text-primary">GL Express</h1>
           </div>
           <nav className="hidden md:flex gap-6">
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
@@ -162,7 +162,7 @@ const HomePage = () => {
               🚀 Premium Features
             </Badge>
             <h3 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6 text-foreground">
-              Why Choose DPD?
+              Why Choose GL Express?
             </h3>
             <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Experience the difference with our advanced logistics platform designed for modern shipping needs
@@ -236,7 +236,7 @@ const HomePage = () => {
             Ready to Experience Better Shipping?
           </h3>
           <p className="text-base md:text-xl mb-6 md:mb-8 opacity-90 max-w-2xl mx-auto px-4">
-            Join thousands of businesses and individuals who trust DPD for their shipping needs
+            Join thousands of businesses and individuals who trust GL Express for their shipping needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
@@ -260,7 +260,7 @@ const HomePage = () => {
                 <div className="p-1.5 md:p-2 bg-primary rounded-lg">
                   <Package className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
                 </div>
-                <h4 className="text-lg md:text-xl font-bold text-primary">DPD Tracking</h4>
+                <h4 className="text-lg md:text-xl font-bold text-primary">GL Express</h4>
               </div>
               <p className="text-sm md:text-base text-muted-foreground mb-6">
                 Leading the way in modern package delivery and tracking solutions worldwide.
@@ -289,7 +289,7 @@ const HomePage = () => {
           </div>
           
           <div className="border-t pt-6 md:pt-8 text-center text-muted-foreground">
-            <p className="text-xs md:text-sm">&copy; 2024 DPD Tracking. All rights reserved. Built with ❤️ for better shipping.</p>
+            <p className="text-xs md:text-sm">&copy; 2024 GL Express. All rights reserved. Built with ❤️ for better shipping.</p>
           </div>
         </div>
       </footer>
