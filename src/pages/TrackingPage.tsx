@@ -174,6 +174,20 @@ const TrackingPage = () => {
                   </div>
                 </div>
 
+                <Separator />
+
+                <div>
+                  <p className="text-sm text-muted-foreground">Delivery Address</p>
+                  <p className="font-medium">{packageData.recipient_address}</p>
+                </div>
+
+                {packageData.recipient_phone && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Recipient Phone</p>
+                    <p className="font-medium">{packageData.recipient_phone}</p>
+                  </div>
+                )}
+
                 {packageData.weight && (
                   <div>
                     <p className="text-sm text-muted-foreground">Weight</p>
