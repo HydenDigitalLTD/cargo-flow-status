@@ -67,11 +67,10 @@ const ExpressDeliveryPage = () => {
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
-            <Button variant="outline" onClick={() => navigate("/auth")}>Admin Login</Button>
           </nav>
           <nav className="md:hidden flex gap-2">
             <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/auth")}>Login</Button>
+            <Button size="sm" variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
           </nav>
         </div>
       </header>

@@ -41,11 +41,10 @@ const ContactPage = () => {
             <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
             <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
             <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
-            <Button variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
           </nav>
           <nav className="md:hidden flex gap-2">
             <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/admin")}>Admin</Button>
+            <Button size="sm" variant="ghost" onClick={() => navigate("/tracking")}>Track</Button>
           </nav>
         </div>
       </header>
