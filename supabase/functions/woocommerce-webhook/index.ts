@@ -81,8 +81,22 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const order: WooCommerceOrder = await req.json();
-    console.log('Received WooCommerce order:', order.id);
+    const body = await req.text();
+    console.log('Received webhook body:', body);
+    
+    if (!body) {
+      throw new Error('Empty request body');
+    }
+
+    let order: WooCommerceOrder;
+    try {
+      order = JSON.parse(body);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      throw new Error('Invalid JSON in request body');
+    }
+
+    console.log('Parsed WooCommerce order:', order.id);
 
     // Generate tracking number
     const trackingNumber = generateTrackingNumber();
