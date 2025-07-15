@@ -61,8 +61,8 @@ const TrackingPage = () => {
 
       if (packageError || !packageData) {
         toast({
-          title: "Package Not Found",
-          description: "No package found with this tracking number.",
+          title: t("noResults"),
+          description: t("noResultsDesc"),
           variant: "destructive"
         });
         setPackageData(null);
@@ -90,6 +90,18 @@ const TrackingPage = () => {
     }
   };
 
+  const getStatusLabel = (status: string) => {
+    const statusMap: Record<string, string> = {
+      'registered': t('registered'),
+      'ready_for_pickup': t('readyForPickup'),
+      'in_transit': t('inTransit'),
+      'out_for_delivery': t('outForDelivery'),
+      'delivered': t('delivered'),
+      'failed_delivery': t('failedDelivery'),
+      'returned': t('returned')
+    };
+    return statusMap[status] || status.replace(/_/g, ' ').toUpperCase();
+  };
   const handleTrack = () => {
     searchPackage(trackingNumber);
   };
@@ -151,21 +163,21 @@ const TrackingPage = () => {
               </CardHeader>
               <CardContent className="space-y-3 md:space-y-4">
                 <div>
-                  <p className="text-xs md:text-sm text-muted-foreground">Tracking Number</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{t("trackingNumberLabel")}</p>
                   <p className="font-mono font-semibold text-sm md:text-base">{packageData.tracking_number}</p>
                 </div>
                 
                 <Separator />
                 
                 <div>
-                  <p className="text-xs md:text-sm text-muted-foreground">Current Status</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{t("status")}</p>
                   <div className="flex items-center gap-2 mt-1">
                     {(() => {
                       const Icon = statusIcons[packageData.current_status as keyof typeof statusIcons];
                       return <Icon className="w-4 h-4" />;
                     })()}
                     <Badge variant={statusColors[packageData.current_status as keyof typeof statusColors] as any} className="text-xs">
-                      {packageData.current_status.replace(/_/g, ' ').toUpperCase()}
+                      {getStatusLabel(packageData.current_status)}
                     </Badge>
                   </div>
                 </div>
@@ -174,7 +186,7 @@ const TrackingPage = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <p className="text-xs md:text-sm text-muted-foreground">Recipient</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">{t("recipientName")}</p>
                     <p className="font-medium text-sm md:text-base">{packageData.recipient_name}</p>
                   </div>
                   <div>
@@ -186,7 +198,7 @@ const TrackingPage = () => {
                 <Separator />
 
                 <div>
-                  <p className="text-xs md:text-sm text-muted-foreground">Delivery Address</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{t("recipientAddress")}</p>
                   <p className="font-medium text-sm md:text-base break-words">{packageData.recipient_address}</p>
                 </div>
 
@@ -238,7 +250,7 @@ const TrackingPage = () => {
                           </div>
                           <div className="flex-1 pb-3 md:pb-4">
                             <p className="font-medium text-sm md:text-base">
-                              {status.status.replace(/_/g, ' ').toUpperCase()}
+                              {getStatusLabel(status.status)}
                             </p>
                             <p className="text-xs md:text-sm text-muted-foreground">
                               {new Date(status.created_at).toLocaleString()}
