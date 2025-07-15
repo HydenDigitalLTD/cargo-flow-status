@@ -6,10 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MapPin, Clock, Package } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const ContactPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,23 +41,26 @@ const ContactPage = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-lg md:text-2xl font-bold text-primary">GL Express</h1>
           <nav className="hidden md:flex gap-6">
-            <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
-            <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
+            <Button variant="ghost" onClick={() => navigate("/")}>{t("home")}</Button>
+            <Button variant="ghost" onClick={() => navigate("/tracking")}>{t("trackPackage")}</Button>
+            <Button variant="ghost" onClick={() => navigate("/contact")}>{t("contact")}</Button>
           </nav>
-          <nav className="md:hidden flex gap-2">
-            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button size="sm" variant="ghost" onClick={() => navigate("/tracking")}>Track</Button>
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav className="md:hidden flex gap-2">
+              <Button size="sm" variant="ghost" onClick={() => navigate("/")}>{t("home")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => navigate("/tracking")}>{t("track")}</Button>
+            </nav>
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 
       <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Contact Us</h2>
+            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">{t("contactUs")}</h2>
             <p className="text-base md:text-xl text-muted-foreground px-4">
-              Get in touch with our support team for any questions or assistance
+              {t("contactDescription")}
             </p>
           </div>
 
@@ -62,7 +68,7 @@ const ContactPage = () => {
             {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Send us a Message</CardTitle>
+                <CardTitle className="text-lg md:text-xl">{t("getInTouch")}</CardTitle>
                 <CardDescription className="text-sm md:text-base">
                   Fill out the form below and we'll get back to you as soon as possible
                 </CardDescription>
@@ -71,7 +77,7 @@ const ContactPage = () => {
                 <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                     <div>
-                      <label className="text-xs md:text-sm font-medium">Name</label>
+                      <label className="text-xs md:text-sm font-medium">{t("name")}</label>
                       <Input
                         value={formData.name}
                         onChange={(e) => handleInputChange("name", e.target.value)}
@@ -81,7 +87,7 @@ const ContactPage = () => {
                       />
                     </div>
                     <div>
-                      <label className="text-xs md:text-sm font-medium">Email</label>
+                      <label className="text-xs md:text-sm font-medium">{t("email")}</label>
                       <Input
                         type="email"
                         value={formData.email}
@@ -94,7 +100,7 @@ const ContactPage = () => {
                   </div>
                   
                   <div>
-                    <label className="text-xs md:text-sm font-medium">Subject</label>
+                    <label className="text-xs md:text-sm font-medium">{t("subject")}</label>
                     <Input
                       value={formData.subject}
                       onChange={(e) => handleInputChange("subject", e.target.value)}
@@ -105,7 +111,7 @@ const ContactPage = () => {
                   </div>
                   
                   <div>
-                    <label className="text-xs md:text-sm font-medium">Message</label>
+                    <label className="text-xs md:text-sm font-medium">{t("message")}</label>
                     <Textarea
                       value={formData.message}
                       onChange={(e) => handleInputChange("message", e.target.value)}
@@ -117,7 +123,7 @@ const ContactPage = () => {
                   </div>
                   
                   <Button type="submit" className="w-full">
-                    Send Message
+                    {t("sendMessage")}
                   </Button>
                 </form>
               </CardContent>
@@ -129,7 +135,7 @@ const ContactPage = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
                     <Mail className="w-4 h-4 md:w-5 md:h-5" />
-                    Email Support
+                    {t("emailSupport")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -145,7 +151,7 @@ const ContactPage = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
                     <MapPin className="w-4 h-4 md:w-5 md:h-5" />
-                    Office Address
+                    {t("officeLocation")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -164,21 +170,21 @@ const ContactPage = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
                     <Clock className="w-4 h-4 md:w-5 md:h-5" />
-                    Business Hours
+                    {t("businessHours")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-1 md:space-y-2">
                     <div className="flex justify-between text-sm md:text-base">
-                      <span className="text-muted-foreground">Monday - Friday:</span>
+                      <span className="text-muted-foreground">{t("mondayFriday")}</span>
                       <span className="font-semibold">8:00 AM - 6:00 PM</span>
                     </div>
                     <div className="flex justify-between text-sm md:text-base">
-                      <span className="text-muted-foreground">Saturday:</span>
+                      <span className="text-muted-foreground">{t("saturday")}</span>
                       <span className="font-semibold">9:00 AM - 4:00 PM</span>
                     </div>
                     <div className="flex justify-between text-sm md:text-base">
-                      <span className="text-muted-foreground">Sunday:</span>
+                      <span className="text-muted-foreground">{t("sunday")}</span>
                       <span className="font-semibold">Closed</span>
                     </div>
                   </div>

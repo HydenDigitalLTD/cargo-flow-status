@@ -19,6 +19,7 @@ import CareersPage from "./pages/CareersPage";
 import PressPage from "./pages/PressPage";
 import PartnershipsPage from "./pages/PartnershipsPage";
 import { AuthProvider } from "@/components/AuthProvider";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
@@ -28,8 +29,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
+        <LanguageProvider>
+          <AuthProvider>
+            <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/tracking" element={<TrackingPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -46,8 +48,9 @@ const App = () => (
             <Route path="/partnerships" element={<PartnershipsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
+            </Routes>
+          </AuthProvider>
+        </LanguageProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

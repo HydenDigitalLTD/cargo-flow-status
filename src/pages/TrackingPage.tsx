@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { Package, Clock, MapPin, CheckCircle, XCircle, Truck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const TrackingPage = () => {
   const [searchParams] = useSearchParams();
@@ -17,6 +19,7 @@ const TrackingPage = () => {
   const [statusHistory, setStatusHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const statusIcons = {
     registered: Package,
@@ -98,14 +101,17 @@ const TrackingPage = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-lg md:text-2xl font-bold text-primary">GL Express</h1>
           <nav className="hidden md:flex gap-6">
-            <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button variant="ghost" onClick={() => navigate("/tracking")}>Track Package</Button>
-            <Button variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
+            <Button variant="ghost" onClick={() => navigate("/")}>{t("home")}</Button>
+            <Button variant="ghost" onClick={() => navigate("/tracking")}>{t("trackPackage")}</Button>
+            <Button variant="ghost" onClick={() => navigate("/contact")}>{t("contact")}</Button>
           </nav>
-          <nav className="md:hidden flex gap-2">
-            <Button size="sm" variant="ghost" onClick={() => navigate("/")}>Home</Button>
-            <Button size="sm" variant="ghost" onClick={() => navigate("/contact")}>Contact</Button>
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav className="md:hidden flex gap-2">
+              <Button size="sm" variant="ghost" onClick={() => navigate("/")}>{t("home")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => navigate("/contact")}>{t("contact")}</Button>
+            </nav>
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 
@@ -113,20 +119,20 @@ const TrackingPage = () => {
         {/* Search Section */}
         <Card className="mb-6 md:mb-8">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">Track Your Package</CardTitle>
-            <CardDescription className="text-sm md:text-base">Enter your tracking number to get the latest updates</CardDescription>
+            <CardTitle className="text-lg md:text-xl">{t("trackingTitle")}</CardTitle>
+            <CardDescription className="text-sm md:text-base">{t("trackingDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-2">
               <Input
-                placeholder="Enter tracking number"
+                placeholder={t("enterTrackingNumber")}
                 value={trackingNumber}
                 onChange={(e) => setTrackingNumber(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleTrack()}
                 className="flex-1"
               />
               <Button onClick={handleTrack} disabled={loading} className="w-full sm:w-auto">
-                {loading ? "Searching..." : "Track"}
+                {loading ? "Searching..." : t("track")}
               </Button>
             </div>
           </CardContent>
