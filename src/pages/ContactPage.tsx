@@ -207,33 +207,33 @@ const ContactPage = () => {
                 <h4 className="text-lg md:text-xl font-bold text-primary">GL Express</h4>
               </div>
               <p className="text-sm md:text-base text-muted-foreground mb-6">
-                Leading the way in modern package delivery and tracking solutions worldwide.
+                {t("footerDescription")}
               </p>
             </div>
             
             <div>
-              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-lg md:text-xl">Subscribe to Newsletter</h5>
+              <h5 className="font-semibold mb-3 md:mb-4 text-foreground text-lg md:text-xl">{t("newsletterTitle")}</h5>
               <p className="text-sm md:text-base text-muted-foreground mb-4">
-                Get the latest updates on shipping, tracking features, and exclusive offers delivered to your inbox.
+                {t("newsletterDescription")}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   type="email"
-                  placeholder="Enter your email address"
+                  placeholder={t("enterEmail")}
                   className="flex-1"
                 />
                 <Button className="bg-primary hover:bg-primary/90">
-                  Subscribe
+                  {t("subscribe")}
                 </Button>
               </div>
               <p className="text-xs md:text-sm text-muted-foreground mt-2">
-                We respect your privacy. Unsubscribe at any time.
+                {t("privacyNotice")}
               </p>
             </div>
           </div>
           
           <div className="border-t pt-6 md:pt-8 text-center text-muted-foreground">
-            <p className="text-xs md:text-sm">&copy; 2024 GL Express. All rights reserved. Built with ❤️ for better shipping.</p>
+            <p className="text-xs md:text-sm">{t("copyright")}</p>
           </div>
         </div>
       </footer>
