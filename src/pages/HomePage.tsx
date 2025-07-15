@@ -19,7 +19,7 @@ const HomePage = () => {
   const features = [
     {
       icon: Package,
-      title: "Secure Packaging",
+      title: "Man ļoti garšo ēst",
       description: "Your packages are handled with the utmost care and security",
       color: "bg-blue-50 text-blue-600"
     },
