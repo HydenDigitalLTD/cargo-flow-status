@@ -56,7 +56,7 @@ const AdminPanel = () => {
     if (authLoading) return;
     
     if (!user) {
-      navigate("/auth");
+      navigate("/admin_login69");
       return;
     }
     
