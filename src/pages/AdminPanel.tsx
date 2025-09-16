@@ -278,6 +278,45 @@ const AdminPanel = () => {
     }
   };
 
+  const updatePackageStatus = async (packageId: string, newStatus: string) => {
+    try {
+      // Update package status
+      const { error: packageError } = await supabase
+        .from("packages")
+        .update({ 
+          current_status: newStatus as any,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", packageId);
+
+      if (packageError) throw packageError;
+
+      // Add to status history
+      const { error: historyError } = await supabase
+        .from("package_status_history")
+        .insert({
+          package_id: packageId,
+          status: newStatus as any,
+          notes: "Status updated manually by admin"
+        });
+
+      if (historyError) throw historyError;
+
+      toast({
+        title: "Success",
+        description: "Package status updated successfully"
+      });
+
+      loadData(); // Reload to show updated status
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update package status",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
@@ -558,6 +597,26 @@ const AdminPanel = () => {
                             >
                               {pkg.recipient_email ? 'Edit Email' : 'Add Email'}
                             </Button>
+                            <Select onValueChange={(newStatus) => updatePackageStatus(pkg.id, newStatus)}>
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Change Status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="registered">Registered</SelectItem>
+                                <SelectItem value="ready_for_pickup">Ready for Pickup</SelectItem>
+                                <SelectItem value="in_transit">In Transit</SelectItem>
+                                <SelectItem value="arrived_at_depot">Arrived at Depot</SelectItem>
+                                <SelectItem value="reached_sorting_facility">Reached Sorting Facility</SelectItem>
+                                <SelectItem value="departed_sorting_facility">Departed Sorting Facility</SelectItem>
+                                <SelectItem value="on_hold">On Hold</SelectItem>
+                                <SelectItem value="out_for_delivery">Out for Delivery</SelectItem>
+                                <SelectItem value="redelivery_attempt">Redelivery Attempt</SelectItem>
+                                <SelectItem value="delivered">Delivered</SelectItem>
+                                <SelectItem value="failed_delivery">Failed Delivery</SelectItem>
+                                <SelectItem value="returned_to_sender">Returned to Sender</SelectItem>
+                                <SelectItem value="returned">Returned</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </TableCell>
                       </TableRow>
