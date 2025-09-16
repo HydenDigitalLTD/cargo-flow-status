@@ -86,6 +86,12 @@ const translations: Record<'en' | 'de', Translation> = {
     delivered: "Delivered",
     failedDelivery: "Failed Delivery",
     returned: "Returned",
+    arrivedAtDepot: "Shipment has arrived at the delivery depot",
+    reachedSortingFacility: "Shipment has reached the sorting facility",
+    onHold: "Shipment is currently on hold",
+    returnedToSender: "Shipment has been returned to the sender",
+    departedSortingFacility: "Shipment has departed from the sorting facility",
+    redeliveryAttempt: "A redelivery attempt has been made",
     
     // Contact Page
     contactUs: "Contact Us",
@@ -202,6 +208,12 @@ const translations: Record<'en' | 'de', Translation> = {
     delivered: "Zugestellt",
     failedDelivery: "Zustellung fehlgeschlagen",
     returned: "Zurückgesendet",
+    arrivedAtDepot: "Sendung ist im Zustelldepot angekommen",
+    reachedSortingFacility: "Sendung hat die Sortieranlage erreicht",
+    onHold: "Sendung ist derzeit zurückgehalten",
+    returnedToSender: "Sendung wurde an den Absender zurückgesendet",
+    departedSortingFacility: "Sendung hat die Sortieranlage verlassen",
+    redeliveryAttempt: "Ein Zustellversuch wurde unternommen",
     
     // Contact Page
     contactUs: "Kontaktieren Sie uns",

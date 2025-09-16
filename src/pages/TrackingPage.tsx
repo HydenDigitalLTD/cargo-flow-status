@@ -98,7 +98,13 @@ const TrackingPage = () => {
       'out_for_delivery': t('outForDelivery'),
       'delivered': t('delivered'),
       'failed_delivery': t('failedDelivery'),
-      'returned': t('returned')
+      'returned': t('returned'),
+      'arrived_at_depot': t('arrivedAtDepot'),
+      'reached_sorting_facility': t('reachedSortingFacility'),
+      'on_hold': t('onHold'),
+      'returned_to_sender': t('returnedToSender'),
+      'departed_sorting_facility': t('departedSortingFacility'),
+      'redelivery_attempt': t('redeliveryAttempt')
     };
     return statusMap[status] || status.replace(/_/g, ' ').toUpperCase();
   };
