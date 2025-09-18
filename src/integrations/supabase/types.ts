@@ -233,6 +233,12 @@ export type Database = {
         | "delivered"
         | "failed_delivery"
         | "returned"
+        | "arrived_at_depot"
+        | "reached_sorting_facility"
+        | "on_hold"
+        | "returned_to_sender"
+        | "departed_sorting_facility"
+        | "redelivery_attempt"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -368,6 +374,12 @@ export const Constants = {
         "delivered",
         "failed_delivery",
         "returned",
+        "arrived_at_depot",
+        "reached_sorting_facility",
+        "on_hold",
+        "returned_to_sender",
+        "departed_sorting_facility",
+        "redelivery_attempt",
       ],
     },
   },
