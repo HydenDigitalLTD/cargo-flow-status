@@ -28,7 +28,13 @@ const TrackingPage = () => {
     out_for_delivery: MapPin,
     delivered: CheckCircle,
     failed_delivery: XCircle,
-    returned: XCircle
+    returned: XCircle,
+    arrived_at_depot: MapPin,
+    reached_sorting_facility: Package,
+    on_hold: Clock,
+    returned_to_sender: XCircle,
+    departed_sorting_facility: Truck,
+    redelivery_attempt: MapPin
   };
 
   const statusColors = {
@@ -38,7 +44,13 @@ const TrackingPage = () => {
     out_for_delivery: "default",
     delivered: "default",
     failed_delivery: "destructive",
-    returned: "destructive"
+    returned: "destructive",
+    arrived_at_depot: "default",
+    reached_sorting_facility: "default",
+    on_hold: "outline",
+    returned_to_sender: "destructive",
+    departed_sorting_facility: "default",
+    redelivery_attempt: "outline"
   };
 
   useEffect(() => {
